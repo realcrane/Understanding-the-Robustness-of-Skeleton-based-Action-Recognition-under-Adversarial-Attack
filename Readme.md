@@ -58,12 +58,12 @@ The code has not been exhaustively tested. You need to run it at your own risk. 
     ```
     python main.py -classifier 3layerMLP --routine gatherCorrectPrediction --dataset {dataset_name} --testFile {training data file, default: classTest.npz} --trainedModelFile {savedModel} --dataPath {path-for-data} -retPath {path-for-results} -cn 65
     ```
-    * This processes by default generates a file called adClassTrain.npz under --retFolder, which contains all the correctly recognised samples for attack.
+    * This process by default generates a file called adClassTrain.npz under --retFolder, which contains all the correctly recognised samples for attack.
 * Finally, you can attack the model by:
     ```
     python main.py --routine attack --attackType ab --dataset {dataset_name} -classifier 3layerMLP --epochs 1000 --batchSize 2 --trainedModelFile {savedModel} --trainFile {data file for samples to attack} --dataPath {path-for-data} -retPath {path-for-results} -cn 65
     ```
-* After attack, we provide a not-so-structured code snippet for unnormalise the adversarial samples in post-processing.py
+* After attack, we provide a not-so-structured code snippet for unnormalising the adversarial samples in post-processing.py
 
 ### Apologies
 
@@ -111,6 +111,9 @@ Please cite our papers on action recognition attacks!
     month={June},
 }
 
+## Acknowledgments
+This project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 899739 CrowdDNA, EPSRC (EP/R031193/1), NSF China (No. 61772462, No. U1736217), RCUK grant CAMERA (EP/M023281/1, EP/T014865/1) and the 100 Talents Program of Zhejiang University.
+
 ## License
 
 Copyright (c) 2021, The University of Leeds, UK.
@@ -136,6 +139,3 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-## Acknowledgments
-This project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 899739 CrowdDNA, EPSRC (EP/R031193/1), NSF China (No. 61772462, No. U1736217), RCUK grant CAMERA (EP/M023281/1, EP/T014865/1) and the 100 Talents Program of Zhejiang University.
