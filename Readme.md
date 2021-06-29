@@ -29,7 +29,7 @@ And other libraries such as numpy.
 No installation needed other than dependencies.
 
 ### Warning
-The code has not been exhaustively tested. You need to run it at your own risk. The author will try to actively maintain and fix reported bugs but this can be delayed.
+The code has not been exhaustively tested. You need to run it at your own risk. The author will try to actively maintain it and fix reported bugs but this can be delayed.
 
 ### Executing program
 
