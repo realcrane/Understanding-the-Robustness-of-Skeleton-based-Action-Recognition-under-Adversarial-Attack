@@ -47,13 +47,7 @@ if __name__ == '__main__':
                     default=0.4)
     ap.add_argument("-blw", "--boneLenWeight", required=False, help="to specify the weight for bone length loss",
                     default=0.7)
-    # ap.add_argument("-br", "--batchRange", required=False,
-    #                 help="to specify the range of batches for adversarial attack", nargs='*', type=int, default=[])
-    # ap.add_argument("-bf", "--batchFile", required=False, help="specify pre-trained batch",
-    #                 default='')
-    # ap.add_argument("-adf", "--attackFile", required=False, help="specify the adversarial example file", default='')
-    # ap.add_argument("-tf", "--attackTestFile", required=False, help="load adexample file",
-    #                 default='')
+
     ap.add_argument("-cp", "--clippingThreshold", required=False, help="set up the clipping threshold in update",
                     default=100)
 
