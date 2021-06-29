@@ -8,7 +8,6 @@ def loadClassifier(args):
     classifier = ''
     if cArgs.classifier == '3layerMLP':
         classifier = ThreeLayerMLP(cArgs)
-        classifier.createModel()
     else:
         print('No classifier created')
 
