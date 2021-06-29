@@ -17,8 +17,6 @@ class SmartAttacker(ActionAttacker):
         self.classWeight = float(args["classWeight"])
         self.reconWeight = float(args["reconWeight"])
         self.boneLenWeight = float(args["boneLenWeight"])
-        # self.batchRange = args["batchRange"]
-        # self.batchFile = args["batchFile"]
         self.attackType = args["attackType"]
         self.epochs = int(args["epochs"])
         self.updateRule = args["updateRule"]
