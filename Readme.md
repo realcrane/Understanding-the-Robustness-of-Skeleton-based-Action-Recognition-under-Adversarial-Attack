@@ -36,7 +36,7 @@ The code has not been exhaustively tested. You need to run it at your own risk. 
 * The code assumes that you have normalised your data and know how to recover it after learning.
 * The code by default assumes every dataset is pre-processed so that there are two files: 
   the training data file and the testing data file. 
-* The specific parameters of the programme is all in main.py
+* The specific parameters of the programme are all in main.py
 * The code only provides a 3-layer MLP classifier (in classifiers.ThreeLayerMLP) as an example. Although SMART can be used to 
   attack almost every skeleton-based action classifier, providing all the source is impossible. However, the code is structured
   in the way that you can create you own ActionClassifier class (in classifiers.ActionClassifier) where it is easy to embed other classifiers.
