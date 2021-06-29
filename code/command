@@ -1,0 +1,6 @@
+# train&test the classifier on hdm05
+python main.py -classifier 3layerMLP --routine train --dataset hdm05 --trainFile classTrain.npz --testFile classTest.npz --dataPath ../data/hdm05/ --retPath ../results/hdm05/3layerMLP/ -ep 200 -cn 65
+python main.py -classifier 3layerMLP --routine test --dataset hdm05 --testFile classTest.npz --trainedModelFile minValLossModel.pth --dataPath ../data/hdm05/ -retPath ../results/hdm05/3layerMLP/ -cn 65
+python main.py -classifier 3layerMLP --routine gatherCorrectPrediction --dataset hdm05 --testFile classTest.npz --trainedModelFile minValLossModel.pth --dataPath ../data/hdm05/ -retPath ../results/hdm05/3layerMLP/ -cn 65
+
+# attack/test the classifier on hdm05
