@@ -154,10 +154,10 @@ class SmartAttacker(ActionAttacker):
 
             return input - grads * self.learningRate
 
-        elif self.updateRule == 'Adam':
-            if self.Adam == '':
-                self.Adam = MyAdam()
-            return self.Adam.get_updates(grads, input)
+        # elif self.updateRule == 'Adam':
+        #     if self.Adam == '':
+        #         self.Adam = MyAdam()
+        #     return self.Adam.get_updates(grads, input)
 
     def attack(self):
 
