@@ -20,9 +20,6 @@ class ActionClassifier:
         self.loss = ''
         self.model = '';
 
-        # tensorBoardLogger = TensorBoard(log_dir=self.retFolder)
-        # self.calbacks = tensorBoardLogger
-
 
     def train(self):
         return
