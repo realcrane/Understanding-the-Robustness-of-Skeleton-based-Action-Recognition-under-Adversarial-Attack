@@ -29,11 +29,6 @@ class SmartAttacker(ActionAttacker):
 
     def boneLengthLoss (self, parentIds, adData, refBoneLengths):
 
-        # parents = [[10], [0], [1], [2], [3],
-        #            [10], [5], [6], [7], [8],
-        #            [10], [10], [11], [12], [13],
-        #            [13], [15], [16], [17], [18],
-        #            [13], [20], [21], [22], [23]]
 
         # convert the data into shape (batchid, frameNo, jointNo, jointCoordinates)
         jpositions = K.reshape(adData, (adData.shape[0], adData.shape[1], -1, 3))
@@ -46,14 +41,7 @@ class SmartAttacker(ActionAttacker):
         boneLengthsLoss = K.mean(
             K.sum(K.sum(K.square(boneLengths - refBoneLengths), axis=-1), axis=-1))
         return boneLengthsLoss
-    # def velLoss (self, adData, refData):
-    #     refVel = refData[:, 1:, :] - refData[:, :-1, :] / self.deltaT
-    #
-    #     adVel = adData[:, 1:, :] - adData[:, :-1, :] / self.deltaT
-    #
-    #     velLoss = K.mean(K.sum(K.sum(K.square(adVel - refVel), axis=-1), axis=-1), axis=-1)
-    #
-    #     return velLoss
+
     def accLoss (self, adData, refData, jointWeights = None):
         refAcc = (refData[:, 2:, :] - 2 * refData[:, 1:-1, :] + refData[:, :-2, :]) / self.deltaT / self.deltaT
 
@@ -63,15 +51,6 @@ class SmartAttacker(ActionAttacker):
             return K.mean(K.sum(K.sum(K.square(adAcc - refAcc), axis=-1), axis=-1), axis=-1)
         else:
             return K.mean(K.sum(K.sum(K.square(adAcc - refAcc), axis=-1), axis=-1)*jointWeights, axis=-1)
-    # def jerkLoss (self, adData, refData):
-    #     refJerk = (refData[:, 3:, :] - 3 * refData[:, 2:-1, :] + 3 * refData[:, 1:-2, :] + refData[:, :-3,
-    #                                                                                    :]) / self.deltaT / self.deltaT / self.deltaT
-    #     adJerk = (adData[:, 3:, :] - 3 * adData[:, 2:-1, :] + 3 * adData[:, 1:-2, :] + adData[:, :-3,
-    #                                                                                    :]) / self.deltaT / self.deltaT / self.deltaT
-    #
-    #     jerkLoss = K.mean(K.sum(K.sum(K.square(adJerk - refJerk), axis=-1), axis=-1), axis=-1)
-    #
-    #     return jerkLoss
 
     def perceptualLoss(self, refData, adData, refBoneLengths):
 
@@ -81,11 +60,6 @@ class SmartAttacker(ActionAttacker):
                                       0.04, 0.04, 0.04, 0.04, 0.04,
                                       0.02, 0.02, 0.02, 0.02, 0.02,
                                       0.02, 0.02, 0.02, 0.02, 0.02]]])
-        # parents = [[10], [0], [1], [2], [3],
-        #            [10], [5], [6], [7], [8],
-        #            [10], [10], [11], [12], [13],
-        #            [13], [15], [16], [17], [18],
-        #            [13], [20], [21], [22], [23]]
 
         elements = self.perpLossType.split('_')
 
@@ -120,64 +94,6 @@ class SmartAttacker(ActionAttacker):
         if len(elements) == 1:
             return oloss
 
-        # elif elements[1] == 'acc':
-        #     jaccLoss = self.accLoss(adData, refData)
-        #
-        #     return jaccLoss * (1 - self.reconWeight) + oloss * self.reconWeight
-        #
-        # elif elements[1] == 'smoothness':
-        #     adAcc = (adData[:, 2:, :] - 2 * adData[:, 1:-1, :] + adData[:, :-2, :]) / self.deltaT / self.deltaT
-        #
-        #     jointAcc = K.mean(K.sum(K.sum(K.square(adAcc), axis=-1), axis=-1), axis=-1)
-        #
-        #     return jointAcc * (1 - self.reconWeight) + oloss * self.reconWeight
-        #
-        # elif elements[1] == 'smoothness-bone':
-        #     adAcc = (adData[:, 2:, :] - 2 * adData[:, 1:-1, :] + adData[:, :-2, :]) / self.deltaT / self.deltaT
-        #
-        #     squaredLoss = K.sum(K.reshape(K.square(adAcc), (adAcc.shape[0], adAcc.shape[1], 25, -1)), axis=-1)
-        #
-        #     weightedSquaredLoss = squaredLoss * jointWeights
-        #
-        #     jointAcc = K.mean(K.sum(K.sum(weightedSquaredLoss, axis=-1), axis=-1), axis=-1)
-        #
-        #     boneLengthsLoss = self.boneLengthLoss(parents, adData, refBoneLengths)
-        #
-        #     return boneLengthsLoss * (1 - self.reconWeight) * self.boneLenWeight + jointAcc * (1 - self.reconWeight) * (
-        #                 1 - self.boneLenWeight) + oloss * self.reconWeight
-        #
-        #
-        # elif elements[1] == 'jerkness':
-        #
-        #     adJerk = (adData[:, 3:, :] - 3 * adData[:, 2:-1, :] + 3 * adData[:, 1:-2, :] + adData[:, :-3,
-        #                                                                                    :]) / self.deltaT / self.deltaT / self.deltaT
-        #
-        #     jointJerk = K.mean(K.sum(K.sum(K.square(adJerk), axis=-1), axis=-1), axis=-1)
-        #
-        #     return jointJerk * (1 - self.reconWeight) + oloss * self.reconWeight
-        #
-        # elif elements[1] == 'acc-jerk':
-        #
-        #     refAcc = (refData[:, 2:, :] - 2 * refData[:, 1:-1, :] + refData[:, :-2, :]) / self.deltaT / self.deltaT
-        #
-        #     adAcc = (adData[:, 2:, :] - 2 * adData[:, 1:-1, :] + adData[:, :-2, :]) / self.deltaT / self.deltaT
-        #
-        #     jointAcc = K.mean(K.sum(K.sum(K.square(adAcc - refAcc), axis=-1), axis=-1), axis=-1)
-        #
-        #     adJerk = (adData[:, 3:, :] - 3 * adData[:, 2:-1, :] + 3 * adData[:, 1:-2, :] + adData[:, :-3,
-        #                                                                                    :]) / self.deltaT / self.deltaT / self.deltaT
-        #
-        #     jointJerk = K.mean(K.sum(K.sum(K.square(adJerk), axis=-1), axis=-1), axis=-1)
-        #
-        #     jerkWeight = 0.7
-        #
-        #     return jointJerk * (1 - self.reconWeight) * jerkWeight + jointAcc * (1 - self.reconWeight) * (
-        #                 1 - jerkWeight) + oloss * self.reconWeight
-        #
-        # elif elements[1] == 'bone':
-        #
-        #     boneLengthsLoss = self.boneLengthLoss(parents, adData, refBoneLengths)
-        #     return boneLengthsLoss * (1 - self.reconWeight) + oloss * self.reconWeight
 
         elif elements[1] == 'acc-bone':
 
