@@ -16,8 +16,7 @@ class ThreeLayerMLP(ActionClassifier):
         super().__init__(args)
         self.trainloader, self.validationloader, self.testloader = createDataLoader(args)
         self.createModel()
-        self.configureOptimiser()
-        self.classificationLoss()
+
     def createModel(self):
         class Classifier(nn.Module):
             def __init__(self, dataloader):
@@ -45,7 +44,8 @@ class ThreeLayerMLP(ActionClassifier):
             self.model = Classifier(self.testloader)
         if len(self.args.trainedModelFile) > 0:
             self.model.load_state_dict(torch.load(self.args.retFolder + self.args.trainedModelFile))
-
+        self.configureOptimiser()
+        self.classificationLoss()
     def configureOptimiser(self):
 
         self.optimiser = torch.optim.Adam(self.model.parameters(), lr=0.001, betas=(0.9, 0.999),
@@ -130,33 +130,6 @@ class ThreeLayerMLP(ActionClassifier):
         np.savetxt(self.args.retFolder + 'testRets.txt', results)
         np.savetxt(self.args.retFolder + 'testGroundTruth.txt', self.testloader.dataset.rlabels)
 
-        # scores = self.model.evaluate(inputData, labels, batch_size=self.batch_size)
-
-        # print('%s: %.2f' % (self.model.metrics_names[0], scores))
-
-        # hitIndices = []
-        #
-        # for i in range(0, len(results)):
-        #     if rlabels[i] == results[i]:
-        #         hitIndices.append(i)
-        #
-        # hitIndices = np.array(hitIndices)
-        #
-        # adData = inputData[hitIndices]
-        # adLabels = rlabels[hitIndices]
-        #
-        # print('Accurary: %.2f' % (len(hitIndices) / len(results)))
-        # # validBatchNo = 3
-        # # validSplit = int(len(adData) / self.batch_size - validBatchNo) * self.batch_size
-        #
-        # # trainData = adData[0: validSplit]
-        # # trainLabels = adLabels[0: validSplit]
-        #
-        # # validData = adData[validSplit:validSplit+(validBatchNo*self.batch_size)]
-        # # validLabels = adLabels[validSplit:validSplit+(validBatchNo*self.batch_size)]
-        #
-        # np.savez_compressed(self.args.dataFolder + 'adClassTrain.npz', clips=adData, classes=adLabels)
-        # np.savez_compressed(self.dataFolder + 'adClassTest.npz', clips=validData, classes=validLabels)
 
     # this function is to collected all the testing samples that can be correctly collected
     # by the pre-trained classifier, to make a dataset for adversarial attack
