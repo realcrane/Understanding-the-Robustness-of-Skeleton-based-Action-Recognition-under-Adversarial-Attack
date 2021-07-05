@@ -74,7 +74,7 @@ class ThreeLayerMLP(ActionClassifier):
                 pred = self.model(X)
                 loss = self.classLoss(pred, y)
 
-                epLoss += loss
+                epLoss += loss.detach().item()
                 # Backpropagation
                 self.optimiser.zero_grad()
                 loss.backward()
@@ -98,7 +98,8 @@ class ThreeLayerMLP(ActionClassifier):
             self.model.eval()
             for v, (tx, ty) in enumerate(self.validationloader):
                 pred = self.model(tx)
-                valLoss += self.classLoss(pred, ty)
+                loss = self.classLoss(pred, ty).detach().item()
+                valLoss += loss
                 vbatch += 1
 
             valLoss /= vbatch
