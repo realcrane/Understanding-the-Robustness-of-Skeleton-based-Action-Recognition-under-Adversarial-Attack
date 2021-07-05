@@ -2,6 +2,7 @@
 import torch
 from torch.utils.data import Dataset
 from shared.helpers import *
+from Configuration import *
 import numpy as np
 class CDataset(Dataset):
     def __init__(self, args, transform=None, target_transform=None):
@@ -25,7 +26,7 @@ class CDataset(Dataset):
     def __getitem__(self, idx):
         data = self.data[idx]
         label = self.labels[idx]
-        return data, label
+        return data.to(device), label.to(device)
 
     # this is the topology of the skeleton, assuming the joints are stored in an array and the indices below
     # indicate their parent node indices. E.g. the parent of the first node is 10 and node[10] is the root node
