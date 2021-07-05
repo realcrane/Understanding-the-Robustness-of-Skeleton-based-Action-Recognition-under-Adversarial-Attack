@@ -4,7 +4,7 @@ import numpy as np
 import os
 import torch
 from torch import nn
-
+from Configuration import *
 from shared.helpers import *
 from torch.utils.tensorboard import SummaryWriter
 
@@ -46,6 +46,7 @@ class ThreeLayerMLP(ActionClassifier):
             self.model.load_state_dict(torch.load(self.args.retFolder + self.args.trainedModelFile))
         self.configureOptimiser()
         self.classificationLoss()
+        self.model.to(device)
     def configureOptimiser(self):
 
         self.optimiser = torch.optim.Adam(self.model.parameters(), lr=0.001, betas=(0.9, 0.999),

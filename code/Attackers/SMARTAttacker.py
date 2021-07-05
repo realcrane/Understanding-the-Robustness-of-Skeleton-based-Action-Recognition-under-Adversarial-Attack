@@ -5,6 +5,7 @@ from Attackers.Attacker import ActionAttacker
 from classifiers.loadClassifiers import loadClassifier
 import torch as K
 import numpy as np
+from Configuration import *
 from shared.helpers import MyAdam, to_categorical
 
 class SmartAttacker(ActionAttacker):
@@ -59,7 +60,7 @@ class SmartAttacker(ActionAttacker):
                                       0.02, 0.02, 0.02, 0.02, 0.02,
                                       0.04, 0.04, 0.04, 0.04, 0.04,
                                       0.02, 0.02, 0.02, 0.02, 0.02,
-                                      0.02, 0.02, 0.02, 0.02, 0.02]]])
+                                      0.02, 0.02, 0.02, 0.02, 0.02]]]).to(device)
 
         elements = self.perpLossType.split('_')
 
@@ -220,12 +221,12 @@ class SmartAttacker(ActionAttacker):
                     print(f"Iteration {ep}/{self.classifier.args.epochs}, batchNo {batchNo}: Class Loss {classLoss:>9f}, Perceptual Loss: {percepLoss:>9f}")
 
                 if self.attackType == 'ab':
-                    foolRate = self.foolRateCal(ty, predictedLabels)
+                    foolRate = self.foolRateCal(ty, predictedLabels).to(device)
                 elif self.attackType == 'abn':
-                    foolRate = self.foolRateCal(ty, predictedLabels, pred)
+                    foolRate = self.foolRateCal(ty, predictedLabels, pred).to(device)
                 elif self.attackType == 'sa':
                     cFlabels = flabels[batchNo * self.classifier.args.batchSize:(batchNo + 1) * self.classifier.args.batchSize]
-                    foolRate = self.foolRateCal(cFlabels, predictedLabels)
+                    foolRate = self.foolRateCal(cFlabels, predictedLabels).to(device)
                 else:
                     print('specified targetted attack, no implemented')
                     return
@@ -242,17 +243,18 @@ class SmartAttacker(ActionAttacker):
 
                     if self.attackType == 'ab' or self.attackType == 'abn':
                         np.savez_compressed(
-                            self.classifier.args.retFolder + folder + 'AdExamples_maxFoolRate_batch%d_AttackType_%s_clw_%.2f_pl_%s_reCon_%.2f_fr_%.2f.npz' % (
+                            self.retFolder + folder + 'AdExamples_maxFoolRate_batch%d_AttackType_%s_clw_%.2f_pl_%s_reCon_%.2f_fr_%.2f.npz' % (
                                 batchNo, self.attackType, self.classWeight, self.perpLossType, self.reconWeight, foolRate),
-                            clips=adData.detach().numpy(), classes=predictedLabels.detach().numpy(),
-                            oriClips=tx.detach().numpy(), tclasses=ty.detach().numpy(), classLos=classLoss.detach().numpy(),percepLoss=percepLoss.detach().numpy())
+                            clips=adData.cpu().detach().numpy(), classes=predictedLabels.cpu().detach().numpy(),
+                            oriClips=tx.cpu().detach().numpy(), tclasses=ty.cpu().detach().numpy(), classLos=classLoss.cpu().detach().numpy(),percepLoss=percepLoss.cpu().detach().numpy())
                     elif self.attackType == 'sa':
                         np.savez_compressed(
-                            self.classifier.args.dataFolder + folder + 'AdExamples_maxFoolRate_batch%d_AttackType_%s_clw_%.2f_pl_%s_reCon_%.2f_fr_%.2f.npz' % (
+                            self.retFolder + folder + 'AdExamples_maxFoolRate_batch%d_AttackType_%s_clw_%.2f_pl_%s_reCon_%.2f_fr_%.2f.npz' % (
                                 batchNo, self.attackType, self.classWeight, self.perpLossType, self.reconWeight, foolRate),
-                            clips=adData.detach().numpy(), classes=predictedLabels.detach().numpy(), fclasses=oflabels,
-                            oriClips=tx.detach().numpy(),
-                            tclasses=ty.detach().numpy(), classLos=classLoss.detach().numpy(),percepLoss=percepLoss.detach().numpy())
+                            clips=adData.cpu().detach().numpy(), classes=predictedLabels.cpu().detach().numpy(), fclasses=oflabels,
+                            oriClips=tx.cpu().detach().numpy(),
+                            tclasses=ty.cpu().detach().numpy(), classLos=classLoss.cpu().detach().numpy(),percepLoss=percepLoss.cpu().detach().numpy())
+
 
                 if maxFoolRate == 100:
                     break;

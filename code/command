@@ -4,3 +4,4 @@ python main.py -classifier 3layerMLP --routine test --dataset hdm05 --testFile c
 python main.py -classifier 3layerMLP --routine gatherCorrectPrediction --dataset hdm05 --testFile classTest.npz --trainedModelFile minValLossModel.pth --dataPath ../data/hdm05/ -retPath ../results/hdm05/3layerMLP/ -cn 65
 
 # attack/test the classifier on hdm05
+python main.py --routine attack --attackType ab --dataset hdm05 -classifier 3layerMLP --epochs 1000 --batchSize 32 --trainedModelFile minValLossModel.pth --trainFile adClassTrain.npz --dataPath ../results/hdm05/ -retPath ../results/hdm05/ -cn 65
