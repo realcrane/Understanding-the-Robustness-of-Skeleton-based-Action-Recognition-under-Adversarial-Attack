@@ -27,6 +27,7 @@ class SmartAttacker(ActionAttacker):
         self.refBoneLengths = []
         self.optimizer = ''
         self.classifier = loadClassifier(args)
+        self.retFolder = args["retPath"]
 
     def boneLengthLoss (self, parentIds, adData, refBoneLengths):
 
@@ -221,12 +222,12 @@ class SmartAttacker(ActionAttacker):
                     print(f"Iteration {ep}/{self.classifier.args.epochs}, batchNo {batchNo}: Class Loss {classLoss:>9f}, Perceptual Loss: {percepLoss:>9f}")
 
                 if self.attackType == 'ab':
-                    foolRate = self.foolRateCal(ty, predictedLabels).to(device)
+                    foolRate = self.foolRateCal(ty, predictedLabels)
                 elif self.attackType == 'abn':
-                    foolRate = self.foolRateCal(ty, predictedLabels, pred).to(device)
+                    foolRate = self.foolRateCal(ty, predictedLabels, pred)
                 elif self.attackType == 'sa':
                     cFlabels = flabels[batchNo * self.classifier.args.batchSize:(batchNo + 1) * self.classifier.args.batchSize]
-                    foolRate = self.foolRateCal(cFlabels, predictedLabels).to(device)
+                    foolRate = self.foolRateCal(cFlabels, predictedLabels)
                 else:
                     print('specified targetted attack, no implemented')
                     return
@@ -238,8 +239,8 @@ class SmartAttacker(ActionAttacker):
                     folder = '/batch%d_%s_clw_%.2f_pl_%s_plw_%.2f/' % (
                         batchNo, self.attackType, self.classWeight, self.perpLossType, self.reconWeight)
 
-                    if not os.path.exists(self.classifier.args.dataFolder + folder):
-                        os.mkdir(self.classifier.args.dataFolder + folder)
+                    if not os.path.exists(self.retFolder + folder):
+                        os.mkdir(self.retFolder + folder)
 
                     if self.attackType == 'ab' or self.attackType == 'abn':
                         np.savez_compressed(
