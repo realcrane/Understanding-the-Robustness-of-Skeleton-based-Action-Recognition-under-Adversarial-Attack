@@ -1,6 +1,6 @@
-# Project Title
+# Understanding the Robustness of Skeleton-based Action Recognition under Adversarial Attack
 
-Understanding the Robustness of Skeleton-based Action Recognition under Adversarial Attack
+
 
 ## Description
 
