@@ -81,7 +81,7 @@ python main.py --help
 
 He Wang, Feixiang He, Zhexi Peng, Tianjia Shao, Yongliang Yang, Kun Zhou and David Hogg
 
-He Wang, h.e.wang@leeds.ac.uk, [Personal website](https://drhewang.com)
+He Wang, he_wang@@ucl.ac.uk, [Personal website](https://drhewang.com)
 
 Project Webpage: http://drhewang.com/pages/AAHAR.html
 
